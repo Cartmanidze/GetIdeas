@@ -1,0 +1,20 @@
+services:
+  get-ideas:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: get-ideas-worker
+    restart: unless-stopped
+    environment:
+      Reddit__ClientId: "${REDDIT_CLIENT_ID}"
+      Reddit__ClientSecret: "${REDDIT_CLIENT_SECRET}"
+      Reddit__UserAgent: "${REDDIT_USER_AGENT}"
+      Llm__ApiKey: "${LLM_API_KEY}"
+      Llm__Model: "${LLM_MODEL:-gpt-4o-mini}"
+      Llm__Endpoint: "${LLM_ENDPOINT:-https://api.openai.com/v1/chat/completions}"
+      Storage__ConnectionString: "Data Source=/app/data/getideas.db"
+      Telegram__Enabled: "${TELEGRAM_ENABLED:-false}"
+      Telegram__BotToken: "${TELEGRAM_BOT_TOKEN:-}"
+      Telegram__ChatId: "${TELEGRAM_CHAT_ID:-}"
+    volumes:
+      - ./data:/app/data
